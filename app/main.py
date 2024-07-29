@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 
 
 class Book:
-    def __init__(self, title: str, content: str):
+    def __init__(self, title: str, content: str) -> None:
         self.title = title
         self.content = content
 
@@ -46,13 +46,13 @@ def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
         if cmd == "display":
             try:
                 getattr(book, f"display_{method_type}")()
-            except AttributeError as e:
+            except AttributeError:
                 raise ValueError(f"Unknown display type: {method_type}")
 
         elif cmd == "print":
             try:
                 getattr(book, f"print_book_{method_type}")()
-            except AttributeError as e:
+            except AttributeError:
                 raise ValueError(f"Unknown print type: {method_type}")
 
         elif cmd == "serialize":
