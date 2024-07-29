@@ -40,6 +40,7 @@ class Book:
         content.text = self.content
         return ElementTree.tostring(root, encoding="unicode")
 
+
 class Serializer:
     def __init__(self, book: Book) -> None:
         self.book = book
@@ -53,7 +54,12 @@ class Serializer:
         raise ValueError(f"Unknown serialize type: {serialize_type}")
 
     def serialize_json(self) -> json:
-        return json.dumps({"title": self.book.title, "content": self.book.content})
+        return json.dumps(
+            {
+                "title": self.book.title,
+                "content": self.book.content
+            }
+        )
 
     def serialize_xml(self) -> json:
         root = ElementTree.Element("book")
@@ -62,6 +68,7 @@ class Serializer:
         content = ElementTree.SubElement(root, "content")
         content.text = self.book.content
         return ElementTree.tostring(root, encoding="unicode")
+
 
 def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
     serializer = Serializer(book)
