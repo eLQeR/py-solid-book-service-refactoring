@@ -40,8 +40,31 @@ class Book:
         content.text = self.content
         return ElementTree.tostring(root, encoding="unicode")
 
+class Serializer:
+    def __init__(self, book: Book) -> None:
+        self.book = book
+
+    def serialize(self, serialize_type: str) -> str:
+        if serialize_type == "json":
+            return self.serialize_json()
+        elif serialize_type == "xml":
+            return self.serialize_xml()
+
+        raise ValueError(f"Unknown serialize type: {serialize_type}")
+
+    def serialize_json(self) -> json:
+        return json.dumps({"title": self.book.title, "content": self.book.content})
+
+    def serialize_xml(self) -> json:
+        root = ElementTree.Element("book")
+        title = ElementTree.SubElement(root, "title")
+        title.text = self.book.title
+        content = ElementTree.SubElement(root, "content")
+        content.text = self.book.content
+        return ElementTree.tostring(root, encoding="unicode")
 
 def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
+    serializer = Serializer(book)
     for cmd, method_type in commands:
         if cmd == "display":
             try:
@@ -56,7 +79,7 @@ def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
                 raise ValueError(f"Unknown print type: {method_type}")
 
         elif cmd == "serialize":
-            return book.serialize(method_type)
+            return serializer.serialize(method_type)
 
 
 if __name__ == "__main__":
